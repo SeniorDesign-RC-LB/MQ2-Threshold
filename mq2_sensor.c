@@ -1,7 +1,7 @@
 #include <iostream>
 #include <wiringPi.h>
 
-#define SENSOR_PIN 0 // GPIO17 pin
+#define MQ2_PIN 0
 
 int main() {
     if (wiringPiSetup() == -1) {
@@ -9,18 +9,17 @@ int main() {
         return 1;
     }
 
-    pinMode(SENSOR_PIN, INPUT);
+    std::cout << "MQ2 warming up!" << std::endl;
+    delay(20000); // Allow the MQ2 to warm up
+
+    float sensorValue;
 
     while (true) {
-        // Detect gas presence (LOW signal indicates gas)
-        if (digitalRead(SENSOR_PIN) == LOW) {
-            std::cout << "Gas detected!" << std::endl;
-        } else {
-            std::cout << "No gas detected." << std::endl;
-        }
+        sensorValue = analogRead(MQ2_PIN); // Read analog input pin
 
-        // Delay between readings
-        delay(1000); // 1 second delay
+        std::cout << "Sensor Value: " << sensorValue << std::endl;
+
+        delay(2000); // Wait 2s for next reading
     }
 
     return 0;
